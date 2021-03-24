@@ -1,6 +1,8 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+
 const mongoose = require('mongoose');
+
 const Sauces = require('./models/Sauces');
 
 const app = express();
@@ -21,46 +23,27 @@ app.use((req, res, next) => {
 app.use(bodyParser.json()); 
 
 app.post('/api/sauces', (req, res, next) =>{
-    console.log(req.body);
-    res.status(201).json({
-        message: 'Objet créé !'
+    delete req.body._id;
+    const sauces = new Sauces ({
+        ...req.body
     });
+    sauces.save()
+    .then(() => res.status(201).json({ message: 'Sauce enregistrée !'}))
+    .catch(error => res.status(400).json({ error }));
 });
 
-app.use('/api/sauces', (req, res, next) => {
-    const sauces = [
-      {
-        _id: 'oeihfzeoi',
-        title: 'Mon premier objet',
-        description: 'Les infos de mon premier objet',
-        imageUrl: 'https://cdn.pixabay.com/photo/2019/06/11/18/56/camera-4267692_1280.jpg',
-        price: 4900,
-        userId: 'qsomihvqios',
-      },
-      {
-        _id: 'stringId',
-        name: 'stringName',
-        manufacturer: 'stringManufacturer',
-        description: 'stringDescription',
-        heat: 'numberHeat',
-        likes: 'numberLike',
-        dislikes: 'numberDislike',
-        imageUrl: 'stringImageUrl',
-        mainPepper: 'stringMainPepper',
-        usersLiked: 'stringLiked[]',
-        usersDisliked: 'stringDisliked[]',
-        userId: 'stringUserId',
-      },
-      {
-        _id: 'oeihfzeomoihi',
-        title: 'Mon deuxième objet',
-        description: 'Les infos de mon deuxième objet',
-        imageUrl: 'https://cdn.pixabay.com/photo/2019/06/11/18/56/camera-4267692_1280.jpg',
-        price: 2900,
-        userId: 'qsomihvqios',
-      },
-    ];
-    res.status(200).json(sauces);
+// récupérer toutes les sauces
+app.get('/api/sauces', (req, res, next) => {
+    Sauces.find()
+    .then(sauces => res.status(200).json(sauces))
+    .catch(error => res.status(400).json({ error }));
   });
+
+// récupérer une sauce en particulier
+  app.get('/api/sauces/:id', (req, res, next) => {
+      Sauces.findOne({ _id: req.params.id })
+      .then(sauces => res.status(200).json(sauces))
+      .catch(error => res.status(404).json({ error }));
+  })
 
 module.exports = app;
