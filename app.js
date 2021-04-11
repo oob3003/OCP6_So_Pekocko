@@ -1,14 +1,16 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-
+const helmet = require('helmet');
 const mongoose = require('mongoose');
 
+const path = require('path');
+
 const stuffRoutes = require('./routes/stuff');
-const userRoutes = require('./routes/user');
+const userRoutes = require('./routes/User');
 
 const app = express();
 
-mongoose.connect('mongodb+srv://Bruno:4UMa6zhZ3DthAuQ@cluster1.lmrur.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',
+mongoose.connect('mongodb+srv://BG:4UMa6zhZ3DthAuQ@cluster1.lmrur.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',
   { useNewUrlParser: true,
     useUnifiedTopology: true })
   .then(() => console.log('Connexion à MongoDB réussie !'))
@@ -21,9 +23,10 @@ app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
     next();
   });
-
+app.use(helmet());
 app.use(bodyParser.json()); 
-
-app.use('/api/stuff', stuffRoutes);
+app.use('/images', express.static(path.join(__dirname, 'images')));
+app.use('/api/sauces', stuffRoutes);
 app.use('/api/auth', userRoutes);
+
 module.exports = app;
