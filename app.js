@@ -9,9 +9,10 @@ const stuffRoutes = require('./routes/stuff');
 const userRoutes = require('./routes/User');
 
 const app = express();
+require('dotenv').config()
 
 // connexion de notre API à notre cluster MongoDB
-mongoose.connect('mongodb+srv://BG:4UMa6zhZ3DthAuQ@cluster1.lmrur.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',
+mongoose.connect(process.env.MondoDB,
   { useNewUrlParser: true,
     useUnifiedTopology: true })
   .then(() => console.log('Connexion à MongoDB réussie !'))
