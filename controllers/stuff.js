@@ -1,30 +1,31 @@
 const Sauces = require('../models/Sauces');
 const fs = require('fs');
 
+// création d'une sauce
 exports.createSauces = (req, res, next) =>{
-    const saucesObject = JSON.parse(req.body.sauce);
-    delete saucesObject._id;
-    const sauces = new Sauces ({
-        ...saucesObject,
-        imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
+    const saucesObject = JSON.parse(req.body.sauce); // parse en json le corps de la requête
+    delete saucesObject._id; // MongoDB génère lui-même un id
+    const sauces = new Sauces ({ 
+        ...saucesObject, // fait une copie de tous les éléments de saucesObject puis on ajoute les éléments ci-dessous
+        imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`, // résoud l'URL complète de notre image
         likes: 0,
         dislikes: 0,
         usersLiked: [],
         usersDisliked: []
 
     });
-    sauces.save()
+    sauces.save() //sauvegarde la sauce créée
     .then(() => res.status(201).json({ message: 'Objet enregistré !'}))
     .catch(error => res.status(400).json({ error }));
 };
 
 exports.modifySauces = (req, res, next) => {
-    const saucesObject = req.file ?
+    const saucesObject = req.file ? // vérifie si req.file existe, 
     {
-      ...JSON.parse(req.body.sauce),
-      imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
-    } : { ...req.body };
-    Sauces.updateOne({ _id: req.params.id }, { ...saucesObject, _id: req.params.id })
+      ...JSON.parse(req.body.sauce), // alors on récupère le corps (req.body.sauce)
+      imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}` // on modifie notre image
+    } : { ...req.body }; // si req.file n'existe pas, alors on copie req.body
+    Sauces.updateOne({ _id: req.params.id }, { ...saucesObject, _id: req.params.id }) // on modifie l'id pour correspondre aux paramètres de la requête
       .then(() => res.status(200).json({ message: 'Sauce modifiée !'}))
       .catch(error => res.status(400).json({ error }));
 };

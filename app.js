@@ -1,9 +1,11 @@
+// aap.js est notre coquille
+
 const express = require('express');// framework 
-const bodyParser = require('body-parser');
+const bodyParser = require('body-parser');//pour parser en json
 const helmet = require('helmet'); // pour sécuriser l'application express
 const mongoose = require('mongoose'); // pour gérer la base de données
 
-const path = require('path');
+const path = require('path'); // pour accéder au path de notre serveur
 
 const stuffRoutes = require('./routes/stuff');
 const userRoutes = require('./routes/User');
@@ -12,13 +14,13 @@ const app = express();
 require('dotenv').config()
 
 // connexion de notre API à notre cluster MongoDB
-mongoose.connect(process.env.MondoDB,
+mongoose.connect(process.env.MONGODB,
   { useNewUrlParser: true,
     useUnifiedTopology: true })
   .then(() => console.log('Connexion à MongoDB réussie !'))
   .catch(() => console.log('Connexion à MongoDB échouée !'));
 
-// CORS obligatoire car front et back sont deux serveurs distincts
+// CORS obligatoire car front et back ont deux URL distincts
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
