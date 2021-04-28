@@ -1,3 +1,5 @@
+// défini les routes pour créer un user et se connecter
+
 const express = require('express');
 const router = express.Router();
 const userCtrl = require('../controllers/user');

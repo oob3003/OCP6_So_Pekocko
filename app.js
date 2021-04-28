@@ -1,7 +1,7 @@
-const express = require('express');
+const express = require('express');// framework 
 const bodyParser = require('body-parser');
-const helmet = require('helmet');
-const mongoose = require('mongoose');
+const helmet = require('helmet'); // pour sécuriser l'application express
+const mongoose = require('mongoose'); // pour gérer la base de données
 
 const path = require('path');
 
@@ -10,13 +10,14 @@ const userRoutes = require('./routes/User');
 
 const app = express();
 
+// connexion de notre API à notre cluster MongoDB
 mongoose.connect('mongodb+srv://BG:4UMa6zhZ3DthAuQ@cluster1.lmrur.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',
   { useNewUrlParser: true,
     useUnifiedTopology: true })
   .then(() => console.log('Connexion à MongoDB réussie !'))
   .catch(() => console.log('Connexion à MongoDB échouée !'));
 
-// CORS
+// CORS obligatoire car front et back sont deux serveurs distincts
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');

@@ -9,11 +9,11 @@ var schema = new passwordValidator();
  
 // Add properties to it
 schema
-.is().min(8)                                    // Minimum length 8
+.is().min(6)                                    // Minimum length 6
 .is().max(100)                                  // Maximum length 100
 .has().uppercase()                              // Must have uppercase letters
 .has().lowercase()                              // Must have lowercase letters
-.has().digits(2)                                // Must have at least 2 digits
+//.has().digits(2)                              // Must have at least 2 digits
 .has().not().spaces()                           // Should not have spaces
 
 exports.signup = (req, res, next) => {
@@ -30,7 +30,7 @@ exports.signup = (req, res, next) => {
     })
     .catch(error => res.status(500).json({ error }));
   }else{
-    res.status(400).json({error:'mot de passe non conforme! Doit contenir entre 8 et 100 caractères avec une majuscule, une minuscume, deux chiffres et pas d \'espace'})
+    res.status(400).json({error:'mot de passe non conforme! Doit contenir entre 6 et 100 caractères avec une majuscule, une minuscule et pas d \'espace'})
   }
 };
 

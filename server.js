@@ -1,4 +1,4 @@
-const http = require('http');
+const http = require('http'); // on importe le package HTTP natif de Node et l'utilise pour créer un serveur.
 const app = require('./app'); // on importe notre application (app), (qui est exportée depuis app.js).
 
 const normalizePort = val => {
@@ -35,7 +35,7 @@ const errorHandler = error => {
   }
 };
 
-const server = http.createServer(app); // méthode .end pour renvoyer le réponse de l'app depuis le serveur.
+const server = http.createServer(app); // la fonction utilise la méthode .end pour renvoyer le réponse de l'app depuis le serveur.
 
 server.on('error', errorHandler);
 server.on('listening', () => {
